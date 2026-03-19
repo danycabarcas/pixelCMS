@@ -13,6 +13,7 @@
                     <thead>
                         <tr>
                             <th>Nombre de Empresa</th>
+                            <th>Dominio Autorizado</th>
                             <th>NIT / Identificación</th>
                             <th>Email de Contacto</th>
                             <th class="text-right">Acciones</th>
@@ -20,11 +21,12 @@
                     </thead>
                     <tbody>
                         <?php if (empty($empresas)): ?>
-                            <tr><td colspan="4" class="text-center py-4 text-muted">No hay empresas registradas aún.</td></tr>
+                            <tr><td colspan="5" class="text-center py-4 text-muted">No hay empresas registradas aún.</td></tr>
                         <?php else: ?>
                             <?php foreach ($empresas as $empresa): ?>
                                 <tr>
                                     <td><strong><?= htmlspecialchars($empresa['nombre']) ?></strong></td>
+                                    <td><span class="text-primary"><i class="fas fa-link mr-1 small"></i><?= htmlspecialchars($empresa['dominio_autorizado'] ?? 'Sin dominio') ?></span></td>
                                     <td><code><?= htmlspecialchars($empresa['nit']) ?></code></td>
                                     <td><?= htmlspecialchars($empresa['email_contacto']) ?></td>
                                     <td class="text-right">

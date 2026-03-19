@@ -18,6 +18,10 @@
                                 <label for="nit">NIT (con dígito de verificación)</label>
                                 <input type="text" name="nit" class="form-control" id="nit" value="<?= htmlspecialchars($empresa['nit']) ?>" required>
                             </div>
+                            <div class="form-group border-top pt-3">
+                                <label for="dominio_autorizado" class="text-primary fw-bold text-uppercase"><i class="fas fa-globe mr-1"></i> Dominio Autorizado</label>
+                                <input type="text" name="dominio_autorizado" class="form-control" id="dominio_autorizado" value="<?= htmlspecialchars($empresa['dominio_autorizado'] ?? '') ?>" required>
+                            </div>
                             <div class="form-group">
                                 <label for="direccion">Dirección Física</label>
                                 <input type="text" name="direccion" class="form-control" id="direccion" value="<?= htmlspecialchars($empresa['direccion'] ?? '') ?>">

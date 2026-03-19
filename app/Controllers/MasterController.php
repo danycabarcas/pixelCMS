@@ -26,8 +26,8 @@ class MasterController extends Controller
             $data = $request->all();
             
             $db->execute("
-                INSERT INTO empresas (nombre, nit, direccion, email_contacto, responsable, whatsapp, contacto_facturacion, contacto_tecnico, created_at)
-                VALUES (:nombre, :nit, :direccion, :email_contacto, :responsable, :whatsapp, :facturacion, :tecnico, NOW())
+                INSERT INTO empresas (nombre, nit, direccion, email_contacto, responsable, whatsapp, contacto_facturacion, contacto_tecnico, dominio_autorizado, created_at)
+                VALUES (:nombre, :nit, :direccion, :email_contacto, :responsable, :whatsapp, :facturacion, :tecnico, :dominio, NOW())
             ", [
                 'nombre'           => $data['nombre'],
                 'nit'              => $data['nit'],
@@ -36,7 +36,8 @@ class MasterController extends Controller
                 'responsable'      => $data['responsable'],
                 'whatsapp'         => $data['whatsapp'],
                 'facturacion'      => $data['contacto_facturacion'],
-                'tecnico'          => $data['contacto_tecnico']
+                'tecnico'          => $data['contacto_tecnico'],
+                'dominio'          => $data['dominio_autorizado']
             ]);
             
             return $this->redirect('/master');
@@ -92,7 +93,8 @@ class MasterController extends Controller
             $db->execute("
                 UPDATE empresas SET nombre = :nombre, nit = :nit, direccion = :direccion, 
                 email_contacto = :email_contacto, responsable = :responsable, whatsapp = :whatsapp, 
-                contacto_facturacion = :contacto_facturacion, contacto_tecnico = :contacto_tecnico
+                contacto_facturacion = :contacto_facturacion, contacto_tecnico = :contacto_tecnico,
+                dominio_autorizado = :dominio
                 WHERE id = :id
             ", [
                 'nombre'           => $data['nombre'],
@@ -103,6 +105,7 @@ class MasterController extends Controller
                 'whatsapp'         => $data['whatsapp'],
                 'contacto_facturacion'=> $data['contacto_facturacion'],
                 'contacto_tecnico' => $data['contacto_tecnico'],
+                'dominio'          => $data['dominio_autorizado'],
                 'id' => $id
             ]);
             return $this->redirect('/master');
