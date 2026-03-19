@@ -44,7 +44,8 @@ class Migration
             echo "⏳ Aplicando: $migrationFile...\n";
             
             try {
-                $this->db->execute($sql);
+                // Usamos exec para permitir múltiples comandos SQL en un solo archivo
+                $this->db->getPDO()->exec($sql);
                 $this->db->execute("INSERT INTO migrations (migration) VALUES (:m)", ['m' => $migrationFile]);
                 echo "✅ Éxito.\n";
             } catch (\Exception $e) {
