@@ -22,6 +22,11 @@ class Request
         return '/' . ltrim($uri, '/') ?: '/';
     }
 
+    public function getPath(): string
+    {
+        return $this->uri();
+    }
+
     public function all(): array
     {
         return array_merge($_GET, $_POST);
