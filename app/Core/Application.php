@@ -18,9 +18,9 @@ class Application
             $dotenv->load();
         }
 
-        $this->router   = new Router();
         $this->request  = new Request();
         $this->response = new Response();
+        $this->router   = new Router($this->request, $this->response);
 
         date_default_timezone_set($_ENV['APP_TIMEZONE'] ?? 'America/Bogota');
         Session::start();
@@ -37,7 +37,7 @@ class Application
     public function run(): void
     {
         try {
-            $this->router->dispatch($this->request);
+            echo $this->router->resolve();
         } catch (\Throwable $e) {
             http_response_code(500);
             echo '<pre style="background:#1e1e2e;color:#cdd6f4;padding:20px;font-family:monospace;">';
