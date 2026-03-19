@@ -50,17 +50,33 @@ class AdminNewsController extends Controller {
             $data = $request->all();
             $slug = !empty($data['slug']) ? $data['slug'] : $this->generateSlug($data['titulo']);
             
+            // --- MANEJO DE IMAGEN ESTANCA (TENANCY) ---
+            $uploadedPath = null;
+            if (!empty($_FILES['imagen_portada']['name'])) {
+                // Creamos carpeta privada: uploads/empresa_X/noticias/
+                $targetDir = dirname(__DIR__, 2) . "/public/uploads/empresa_{$empresaId}/noticias/";
+                if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
+                
+                $fileName = time() . '_' . basename($_FILES['imagen_portada']['name']);
+                $targetFile = $targetDir . $fileName;
+                
+                if (move_uploaded_file($_FILES['imagen_portada']['tmp_name'], $targetFile)) {
+                    $uploadedPath = "/uploads/empresa_{$empresaId}/noticias/" . $fileName;
+                }
+            }
+            
             $db->execute("
                 INSERT INTO noticias (
-                    empresa_id, titulo, slug, resumen, contenido_html, 
+                    empresa_id, titulo, slug, resumen, contenido_html, imagen_portada,
                     meta_title, meta_description, categoria_id, tags, status, fecha_publicacion
-                ) VALUES (:eid, :tit, :slug, :res, :html, :mtit, :mdes, :cat, :tags, 1, NOW())
+                ) VALUES (:eid, :tit, :slug, :res, :html, :img, :mtit, :mdes, :cat, :tags, 1, NOW())
             ", [
                 'eid'  => $empresaId,
                 'tit'  => $data['titulo'],
                 'slug' => $slug,
                 'res'  => $data['resumen'],
                 'html' => $data['contenido'],
+                'img'  => $uploadedPath,
                 'mtit' => $data['meta_title'] ?? $data['titulo'],
                 'mdes' => $data['meta_description'] ?? $data['resumen'],
                 'cat'  => !empty($data['categoria_id']) ? $data['categoria_id'] : null,
