@@ -72,9 +72,12 @@ class MasterController extends Controller
         }
         
         $empresas = $db->query("SELECT id, nombre FROM empresas");
+        $modulos = $db->query("SELECT * FROM modulos WHERE status = 1 ORDER BY nombre ASC");
+        
         return $this->view('master.licencias.create', [
             'title'    => 'Nueva Licencia',
-            'empresas' => $empresas
+            'empresas' => $empresas,
+            'modulos'  => $modulos
         ], 'master');
     }
 }
