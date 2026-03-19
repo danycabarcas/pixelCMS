@@ -13,23 +13,23 @@
     
     <style>
         :root {
-            --gov-blue: #004884;
-            --gov-blue-dark: #003366;
+            --gov-blue: #0943b5;
+            --gov-blue-dark: #063184;
             --gov-font: 'Work Sans', sans-serif;
         }
         body { font-family: var(--gov-font); background-color: #f8f9fa; }
         
         /* Barra Gov.co */
-        .gov-bar { background-color: #3366cc; padding: 5px 0; color: white; font-size: 13px; }
+        .gov-bar { background-color: #0943b5; padding: 5px 0; color: white; font-size: 13px; }
         .gov-logo { height: 25px; filter: brightness(0) invert(1); }
         
         /* Menu Principal */
-        .main-navbar { background-color: var(--gov-blue); border-bottom: 4px solid #fccd00; }
+        .main-navbar { background-color: #0943b5; border-bottom: 4px solid #fccd00; }
         .nav-link { color: white !important; font-weight: 500; text-transform: uppercase; font-size: 14px; }
         .nav-link:hover { background-color: rgba(255,255,255,0.1); }
         
         /* Footer */
-        .gov-footer { background-color: #f2f2f2; border-top: 5px solid #004884; padding: 40px 0; font-size: 14px; }
+        .gov-footer { background-color: #f2f2f2; border-top: 5px solid #0943b5; padding: 40px 0; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -37,7 +37,7 @@
     <!-- Barra Superior Oficial Gov.co -->
     <div class="gov-bar">
         <div class="container d-flex justify-content-between align-items-center">
-            <img src="https://www.gov.co/assets/images/logo.png" class="gov-logo" alt="Logo de GOV.CO">
+            <img src="https://cdn.www.gov.co/assets/images/logoGovCO.png" class="gov-logo" alt="Logo de GOV.CO">
             <span>Portal Oficial del Estado Colombiano</span>
         </div>
     </div>

@@ -51,16 +51,29 @@
 
                     <div class="row mt-4">
                         <!-- Sección 3: Contactos Especializados -->
-                        <div class="col-md-6">
-                            <h5 class="text-muted border-bottom pb-2 mb-3"><i class="fas fa-file-invoice-dollar mr-1"></i> Contacto Facturación</h5>
+                        <div class="col-md-6 border-right">
+                            <h5 class="text-muted border-bottom pb-2 mb-3"><i class="fas fa-file-invoice-dollar mr-1"></i> Otros Contactos</h5>
                             <div class="form-group">
+                                <label>Facturación:</label>
                                 <input type="text" name="contacto_facturacion" class="form-control" id="contacto_facturacion" value="<?= htmlspecialchars($empresa['contacto_facturacion'] ?? '') ?>">
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="text-muted border-bottom pb-2 mb-3"><i class="fas fa-cogs mr-1"></i> Contacto Técnico</h5>
                             <div class="form-group">
+                                <label>Técnico:</label>
                                 <input type="text" name="contacto_tecnico" class="form-control" id="contacto_tecnico" value="<?= htmlspecialchars($empresa['contacto_tecnico'] ?? '') ?>">
+                            </div>
+                        </div>
+
+                        <!-- Sección de Autenticación del Cliente -->
+                        <div class="col-md-6 bg-light p-3 border rounded shadow-sm">
+                            <h5 class="text-primary border-bottom pb-2 mb-3"><i class="fas fa-user-shield mr-1"></i> Acceso Administrador Cliente</h5>
+                            <div class="form-group">
+                                <label for="admin_user">Usuario (Admin Email)</label>
+                                <input type="text" name="admin_user" class="form-control" id="admin_user" value="<?= htmlspecialchars($admin['username'] ?? '') ?>" placeholder="ej: hospital_admin">
+                            </div>
+                            <div class="form-group">
+                                <label for="admin_pass">Nueva Contraseña</label>
+                                <input type="password" name="admin_pass" class="form-control border-warning" id="admin_pass" placeholder="Sólo para crear o cambiar">
+                                <small class="text-danger"><i class="fas fa-info-circle mr-1"></i> Deje en blanco si no desea cambiar la clave.</small>
                             </div>
                         </div>
                     </div>

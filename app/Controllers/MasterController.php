@@ -88,8 +88,13 @@ class MasterController extends Controller
         $empresa = $db->query("SELECT * FROM empresas WHERE id = :id", ['id' => $id])[0] ?? null;
         if (!$empresa) return $this->redirect('/master');
 
+        // Buscar si esta empresa ya tiene un usuario administrador
+        $admin = $db->query("SELECT * FROM users WHERE empresa_id = :eid LIMIT 1", ['eid' => $id])[0] ?? null;
+
         if ($request->method() === 'POST') {
             $data = $request->all();
+            
+            // 1. Actualizar Datos de Empresa
             $db->execute("
                 UPDATE empresas SET nombre = :nombre, nit = :nit, direccion = :direccion, 
                 email_contacto = :email_contacto, responsable = :responsable, whatsapp = :whatsapp, 
@@ -108,10 +113,32 @@ class MasterController extends Controller
                 'dominio'          => $data['dominio_autorizado'],
                 'id' => $id
             ]);
+
+            // 2. Gestionar Usuario Administrador (Si se llenó password)
+            if (!empty($data['admin_user']) && !empty($data['admin_pass'])) {
+                if ($admin) {
+                    $db->execute("UPDATE users SET username = :user, password = :pass WHERE id = :uid", [
+                        'user' => $data['admin_user'],
+                        'pass' => password_hash($data['admin_pass'], PASSWORD_DEFAULT),
+                        'uid'  => $admin['id']
+                    ]);
+                } else {
+                    $db->execute("INSERT INTO users (username, password, role, empresa_id, created_at) VALUES (:user, :pass, 'admin_empresa', :eid, NOW())", [
+                        'user' => $data['admin_user'],
+                        'pass' => password_hash($data['admin_pass'], PASSWORD_DEFAULT),
+                        'eid'  => $id
+                    ]);
+                }
+            }
+
             return $this->redirect('/master');
         }
 
-        return $this->view('master.empresas.edit', ['title' => 'Editar Empresa', 'empresa' => $empresa], 'master');
+        return $this->view('master.empresas.edit', [
+            'title' => 'Editar Empresa', 
+            'empresa' => $empresa,
+            'admin' => $admin
+        ], 'master');
     }
 
     public function editLicencia(Request $request, $id)
