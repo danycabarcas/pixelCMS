@@ -26,21 +26,24 @@ class MasterController extends Controller
             $data = $request->all();
             
             $db->execute("
-                INSERT INTO empresas (nombre, nit, direccion, telefono, email_contacto)
-                VALUES (:nombre, :nit, :direccion, :telefono, :email_contacto)
+                INSERT INTO empresas (nombre, nit, direccion, email_contacto, responsable, whatsapp, contacto_facturacion, contacto_tecnico, created_at)
+                VALUES (:nombre, :nit, :direccion, :email_contacto, :responsable, :whatsapp, :facturacion, :tecnico, NOW())
             ", [
-                'nombre'         => $data['nombre'],
-                'nit'            => $data['nit'],
-                'direccion'      => $data['direccion'],
-                'telefono'       => $data['telefono'],
-                'email_contacto' => $data['email_contacto']
+                'nombre'           => $data['nombre'],
+                'nit'              => $data['nit'],
+                'direccion'        => $data['direccion'],
+                'email_contacto'   => $data['email_contacto'],
+                'responsable'      => $data['responsable'],
+                'whatsapp'         => $data['whatsapp'],
+                'facturacion'      => $data['contacto_facturacion'],
+                'tecnico'          => $data['contacto_tecnico']
             ]);
             
             return $this->redirect('/master');
         }
         
         return $this->view('master.empresas.create', [
-            'title' => 'Nueva Empresa'
+            'title' => 'Nueva Empresa Maestro'
         ], 'master');
     }
 
