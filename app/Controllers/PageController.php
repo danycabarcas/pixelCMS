@@ -11,7 +11,7 @@ class PageController extends Controller
     public function index()
     {
         $db = Database::getInstance();
-        $pages = $db->query("SELECT * FROM paginas ORDER BY title ASC");
+        $pages = $db->query("SELECT * FROM paginas ORDER BY titulo ASC");
         return $this->view('admin.pages.index', ['pages' => $pages], 'admin');
     }
 
