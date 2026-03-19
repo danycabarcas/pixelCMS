@@ -24,19 +24,11 @@
                             </div>
                         </div>
 
-                        <!-- FILA 2: EL CONSTRUCTOR FULL WIDTH -->
+                        <!-- EL CONSTRUCTOR VISUAL MAESTRO (FULL WIDTH NATIVO) -->
                         <div class="col-md-12 mb-5">
-                            <label class="text-primary font-weight-bold mb-2"><i class="fas fa-magic"></i> DISEÑADOR VISUAL PRO</label>
-                            <div class="row no-gutters border rounded bg-white shadow-sm overflow-hidden">
-                                <div class="col-md-9 border-right">
-                                    <div id="gjs" style="height: 600px; background: #fff;"></div>
-                                </div>
-                                <div class="col-md-3 bg-light" style="height: 600px; overflow-y: auto;">
-                                    <div class="p-2 border-bottom text-center bg-dark text-white text-xs font-weight-bold">
-                                        BLOQUES DISPONIBLES
-                                    </div>
-                                    <div id="blocks"></div>
-                                </div>
+                            <label class="text-primary font-weight-bold mb-2"><i class="fas fa-magic"></i> DISEÑADOR VISUAL PROFESIONAL (Todo integrado)</label>
+                            <div class="border rounded bg-white shadow-sm overflow-hidden">
+                                <div id="gjs" style="height: 600px; background: #fff;"></div>
                             </div>
                             <input type="hidden" name="contenido" id="contenido_html">
                         </div>
@@ -96,48 +88,47 @@
 </div>
 
 <script>
-    // Inicializar GrapesJS Senior (CM Mode 2.0)
+    // Inicializar GrapesJS Master Pro (Todo integrado)
     const editor = grapesjs.init({
         container: '#gjs',
         fromElement: true,
         height: '600px',
         storageManager: false,
-        blockManager: {
-            appendTo: '#blocks'
-        },
-        i18n: {
-            locale: 'es',
-            messages: {
-                es: {
-                    blockManager: { labels: { 'text': 'Texto', 'image': 'Imagen', 'column1': '1 Columna', 'column2': '2 Columnas' } },
-                    styleManager: { sectors: { 'general': 'General', 'dimension': 'Dimensión', 'typography': 'Tipografía' } }
-                }
-            }
-        },
+        i18n: { locale: 'es' },
         styleManager: {
-            sectors: [{
-                name: 'Estilos de Texto',
-                open: true,
-                buildProps: ['font-size', 'color', 'text-align', 'font-family']
-            }]
+            sectors: [
+                { name: 'General', buildProps: ['float', 'display', 'position', 'top', 'right', 'left', 'bottom'] },
+                { name: 'Dimensión', open: false, buildProps: ['width', 'height', 'max-width', 'min-height', 'margin', 'padding'] },
+                { name: 'Tipografía', open: false, buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align', 'text-shadow'] },
+                { name: 'Decoración', open: false, buildProps: ['background-color', 'border-radius', 'border', 'box-shadow', 'background'] },
+                { name: 'Extra', open: false, buildProps: ['opacity', 'transition', 'perspective', 'transform'] }
+            ]
         }
     });
 
     const bm = editor.BlockManager;
 
-    // BLOQUES PRE-ARMADOS (Proyectos Senior)
+    // BLOQUES PRE-ARMADOS INTEGRADOS
     bm.add('seccion-noticia', {
-        label: '<div class="gjs-block-label">Sección con Foto</div>',
+        label: '<div class="gjs-block-label"><i class="fas fa-columns"></i><br>Sección Foto</div>',
         content: `<div style="display: flex; flex-wrap: wrap; padding: 20px;">
                     <div style="flex: 1; min-width: 300px;"><h2>Título Seccion</h2><p>Texto aquí...</p></div>
                     <div style="flex: 1; min-width: 300px;"><img src="https://via.placeholder.com/500x300" style="width: 100%;"></div>
                   </div>`,
-        category: 'Maquetación'
+        category: 'Diseños Pre-armados'
     });
 
-    bm.add('txt-basico', { label: 'Texto Simple', content: '<p>Escriba su contenido aquí...</p>', category: 'Básicos' });
-    bm.add('img-full', { label: 'Imagen Full', content: '<img src="https://via.placeholder.com/800x400" style="width: 100%;">', category: 'Básicos' });
-    bm.add('2-cols', { label: '2 Columnas', content: '<div style="display:flex"><div style="flex:1;padding:10px">Col 1</div><div style="flex:1;padding:10px">Col 2</div></div>', category: 'Maquetación' });
+    bm.add('txt-basico', { label: '<i class="fas fa-align-justify"></i><br>Texto', content: '<p>Escriba su contenido aquí...</p>', category: 'Básicos' });
+    bm.add('img-full', { label: '<i class="fas fa-image"></i><br>Imagen', content: '<img src="https://via.placeholder.com/800x400" style="width: 100%;">', category: 'Básicos' });
+    bm.add('2-cols', { label: '<i class="fas fa-th-large"></i><br>2 Columnas', content: '<div style="display:flex"><div style="flex:1;padding:10px">Col 1</div><div style="flex:1;padding:10px">Col 2</div></div>', category: 'Maquetación' });
+    bm.add('video-yt', { label: '<i class="fab fa-youtube"></i><br>Video', content: '<div style="padding:10px"><iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe></div>', category: 'Multimedia' });
+
+    // Forzar la pestaña de bloques al inicio
+    editor.on('load', () => {
+        const panels = editor.Panels;
+        const blocksPanel = panels.getButton('views', 'open-blocks');
+        if (blocksPanel) blocksPanel.set('active', 1);
+    });
 
     document.getElementById('news-form').onsubmit = function() {
         document.getElementById('contenido_html').value = `<style>${editor.getCss()}</style>${editor.getHtml()}`;
