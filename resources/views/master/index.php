@@ -28,7 +28,10 @@
                                     <td><code><?= htmlspecialchars($empresa['nit']) ?></code></td>
                                     <td><?= htmlspecialchars($empresa['email_contacto']) ?></td>
                                     <td class="text-right">
-                                        <a href="/master/licencias/crear?empresa_id=<?= $empresa['id'] ?>" class="btn btn-outline-primary btn-xs">Generar Licencia</a>
+                                        <div class="btn-group">
+                                            <a href="/master/empresas/editar/<?= $empresa['id'] ?>" class="btn btn-default btn-xs"><i class="fas fa-edit"></i></a>
+                                            <a href="/master/licencias/crear?empresa_id=<?= $empresa['id'] ?>" class="btn btn-primary btn-xs"><i class="fas fa-key"></i> Licencia</a>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -54,6 +57,7 @@
                             <th>Vencimiento</th>
                             <th>Plan</th>
                             <th class="text-center">Estado</th>
+                            <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,6 +84,9 @@
                                         <span class="badge badge-<?= $lic['status'] == 1 ? 'success' : 'danger' ?>">
                                             <?= $lic['status'] == 1 ? 'Activa' : 'Inactiva' ?>
                                         </span>
+                                    </td>
+                                    <td class="text-right">
+                                        <a href="/master/licencias/editar/<?= $lic['id'] ?>" class="btn btn-default btn-xs"><i class="fas fa-edit"></i> Editar</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -17,13 +17,20 @@ $router->get('/404', function() { return "Error 404: Ruta no encontrada"; });
 $router->get('/master', [MasterController::class, 'index'], [AuthMiddleware::class]);
 $router->get('/master/empresas/crear', [MasterController::class, 'createEmpresa'], [AuthMiddleware::class]);
 $router->post('/master/empresas/crear', [MasterController::class, 'createEmpresa'], [AuthMiddleware::class]);
+$router->get('/master/empresas/editar/{id}', [MasterController::class, 'editEmpresa'], [AuthMiddleware::class]);
+$router->post('/master/empresas/editar/{id}', [MasterController::class, 'editEmpresa'], [AuthMiddleware::class]);
+
 $router->get('/master/licencias/crear', [MasterController::class, 'createLicencia'], [AuthMiddleware::class]);
 $router->post('/master/licencias/crear', [MasterController::class, 'createLicencia'], [AuthMiddleware::class]);
+$router->get('/master/licencias/editar/{id}', [MasterController::class, 'editLicencia'], [AuthMiddleware::class]);
+$router->post('/master/licencias/editar/{id}', [MasterController::class, 'editLicencia'], [AuthMiddleware::class]);
 
 // --- Módulos Maestro ---
 $router->get('/master/modulos', [\App\Controllers\ModulosController::class, 'index'], [AuthMiddleware::class]);
 $router->get('/master/modulos/crear', [\App\Controllers\ModulosController::class, 'create'], [AuthMiddleware::class]);
 $router->post('/master/modulos/crear', [\App\Controllers\ModulosController::class, 'create'], [AuthMiddleware::class]);
+$router->get('/master/modulos/editar/{id}', [\App\Controllers\ModulosController::class, 'edit'], [AuthMiddleware::class]);
+$router->post('/master/modulos/editar/{id}', [\App\Controllers\ModulosController::class, 'edit'], [AuthMiddleware::class]);
 
 // --- CMS Pages ---
 $router->get('/admin/pages', [PageController::class, 'index'], [AuthMiddleware::class]);

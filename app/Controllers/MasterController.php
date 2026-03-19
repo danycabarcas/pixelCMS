@@ -80,4 +80,67 @@ class MasterController extends Controller
             'modulos'  => $modulos
         ], 'master');
     }
+
+    public function editEmpresa(Request $request, $id)
+    {
+        $db = Database::getInstance();
+        $empresa = $db->query("SELECT * FROM empresas WHERE id = :id", ['id' => $id])[0] ?? null;
+        if (!$empresa) return $this->redirect('/master');
+
+        if ($request->method() === 'POST') {
+            $data = $request->all();
+            $db->execute("
+                UPDATE empresas SET nombre = :nombre, nit = :nit, direccion = :direccion, 
+                email_contacto = :email_contacto, responsable = :responsable, whatsapp = :whatsapp, 
+                contacto_facturacion = :contacto_facturacion, contacto_tecnico = :contacto_tecnico
+                WHERE id = :id
+            ", [
+                'nombre'           => $data['nombre'],
+                'nit'              => $data['nit'],
+                'direccion'        => $data['direccion'],
+                'email_contacto'   => $data['email_contacto'],
+                'responsable'      => $data['responsable'],
+                'whatsapp'         => $data['whatsapp'],
+                'contacto_facturacion'=> $data['contacto_facturacion'],
+                'contacto_tecnico' => $data['contacto_tecnico'],
+                'id' => $id
+            ]);
+            return $this->redirect('/master');
+        }
+
+        return $this->view('master.empresas.edit', ['title' => 'Editar Empresa', 'empresa' => $empresa], 'master');
+    }
+
+    public function editLicencia(Request $request, $id)
+    {
+        $db = Database::getInstance();
+        $licencia = $db->query("SELECT * FROM licencias WHERE id = :id", ['id' => $id])[0] ?? null;
+        if (!$licencia) return $this->redirect('/master');
+
+        if ($request->method() === 'POST') {
+            $data = $request->all();
+            $db->execute("
+                UPDATE licencias SET empresa_id = :empresa_id, fecha_vencimiento = :fecha_vencimiento, 
+                modulos_json = :modulos, periodo_gracia_dias = :gracia, status = :status
+                WHERE id = :id
+            ", [
+                'empresa_id'        => $data['empresa_id'],
+                'fecha_vencimiento' => $data['fecha_vencimiento'],
+                'modulos'           => json_encode($data['modulos'] ?? []),
+                'gracia'            => $data['periodo_gracia'] ?? 7,
+                'status'            => $data['status'] ?? 0,
+                'id' => $id
+            ]);
+            return $this->redirect('/master');
+        }
+
+        $empresas = $db->query("SELECT id, nombre FROM empresas");
+        $modulos = $db->query("SELECT * FROM modulos WHERE status = 1 ORDER BY nombre ASC");
+        return $this->view('master.licencias.edit', [
+            'title'    => 'Editar Licencia',
+            'licencia' => $licencia,
+            'empresas' => $empresas,
+            'modulos'  => $modulos
+        ], 'master');
+    }
 }

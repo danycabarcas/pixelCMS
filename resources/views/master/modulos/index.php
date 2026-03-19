@@ -16,6 +16,7 @@
                             <th>Slug (ID Interno)</th>
                             <th>Descripción</th>
                             <th class="text-center">Estado</th>
+                            <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,6 +33,9 @@
                                         <span class="badge badge-<?= $mod['status'] == 1 ? 'success' : 'danger' ?>">
                                             <?= $mod['status'] == 1 ? 'Activo' : 'Inactivo' ?>
                                         </span>
+                                    </td>
+                                    <td class="text-right">
+                                        <a href="/master/modulos/editar/<?= $mod['id'] ?>" class="btn btn-default btn-xs"><i class="fas fa-edit"></i> Editar</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

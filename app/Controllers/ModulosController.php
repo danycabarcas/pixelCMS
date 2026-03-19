@@ -43,4 +43,34 @@ class ModulosController extends Controller
             'title' => 'Nuevo Módulo'
         ], 'master');
     }
+
+    public function edit(Request $request, $id)
+    {
+        $db = Database::getInstance();
+        $modulo = $db->query("SELECT * FROM modulos WHERE id = :id", ['id' => $id])[0] ?? null;
+        if (!$modulo) return $this->redirect('/master/modulos');
+
+        if ($request->method() === 'POST') {
+            $data = $request->all();
+            $db->execute("
+                UPDATE modulos SET nombre = :nombre, slug = :slug, descripcion = :descripcion, 
+                icono = :icono, status = :status
+                WHERE id = :id
+            ", [
+                'nombre'      => $data['nombre'],
+                'slug'        => $data['slug'],
+                'descripcion' => $data['descripcion'],
+                'icono'       => $data['icono'] ?? 'fa-cube',
+                'status'      => $data['status'] ?? 1,
+                'id'          => $id
+            ]);
+            
+            return $this->redirect('/master/modulos');
+        }
+
+        return $this->view('master.modulos.edit', [
+            'title'  => 'Editar Módulo',
+            'modulo' => $modulo
+        ], 'master');
+    }
 }
