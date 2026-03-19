@@ -31,6 +31,21 @@ class AdminNewsController extends Controller {
         $db = Database::getInstance();
         $empresaId = Application::$app->session->get('empresa_id');
         
+        // Obtenemos categorías de esta empresa
+        $categorias = $db->query("SELECT * FROM categorias_noticias WHERE empresa_id = :eid", ['eid' => $empresaId]);
+        
+        // Obtenemos una lista de tags únicos usados anteriormente (para la nube de tags)
+        $rawTags = $db->query("SELECT tags FROM noticias WHERE empresa_id = :eid AND tags IS NOT NULL", ['eid' => $empresaId]);
+        $popularTags = [];
+        foreach($rawTags as $rt) {
+            $tagsArray = explode(',', $rt['tags']);
+            foreach($tagsArray as $t) {
+                $t = trim($t);
+                if(!empty($t) && !in_array($t, $popularTags)) $popularTags[] = $t;
+            }
+        }
+        $popularTags = array_slice($popularTags, 0, 10); // Top 10 tags
+
         if ($request->method() === 'POST') {
             $data = $request->all();
             $slug = !empty($data['slug']) ? $data['slug'] : $this->generateSlug($data['titulo']);
@@ -38,8 +53,8 @@ class AdminNewsController extends Controller {
             $db->execute("
                 INSERT INTO noticias (
                     empresa_id, titulo, slug, resumen, contenido_html, 
-                    meta_title, meta_description, status, fecha_publicacion
-                ) VALUES (:eid, :tit, :slug, :res, :html, :mtit, :mdes, 1, NOW())
+                    meta_title, meta_description, categoria_id, tags, status, fecha_publicacion
+                ) VALUES (:eid, :tit, :slug, :res, :html, :mtit, :mdes, :cat, :tags, 1, NOW())
             ", [
                 'eid'  => $empresaId,
                 'tit'  => $data['titulo'],
@@ -47,13 +62,19 @@ class AdminNewsController extends Controller {
                 'res'  => $data['resumen'],
                 'html' => $data['contenido'],
                 'mtit' => $data['meta_title'] ?? $data['titulo'],
-                'mdes' => $data['meta_description'] ?? $data['resumen']
+                'mdes' => $data['meta_description'] ?? $data['resumen'],
+                'cat'  => !empty($data['categoria_id']) ? $data['categoria_id'] : null,
+                'tags' => $data['tags'] ?? ''
             ]);
 
             return $this->redirect('/admin/noticias');
         }
 
-        return $this->view('admin.noticias.create', ['title' => 'Nueva Noticia'], 'admin');
+        return $this->view('admin.noticias.create', [
+            'title' => 'Nueva Noticia Magazine',
+            'categorias' => $categorias,
+            'popularTags' => $popularTags
+        ], 'admin');
     }
 
     private function generateSlug($text) {

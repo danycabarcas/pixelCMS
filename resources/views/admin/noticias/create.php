@@ -1,35 +1,68 @@
-<div class="row">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- GrapesJS Styles & Scripts -->
+    <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
+    <script src="https://unpkg.com/grapesjs"></script>
+    <script src="https://unpkg.com/grapesjs-preset-webpage"></script>
+
     <div class="col-md-12 mx-auto">
-        <form action="/admin/noticias/crear" method="POST" enctype="multipart/form-data">
+        <form action="/admin/noticias/crear" method="POST" enctype="multipart/form-data" id="news-form">
             <div class="card card-outline card-primary shadow-sm bg-white p-3">
                 <div class="card-header bg-white border-bottom-0">
-                    <h3 class="card-title text-primary"><i class="fas fa-edit mr-2"></i> Redactar Nueva Noticia para el Portal</h3>
+                    <h3 class="card-title text-primary"><i class="fas fa-magic mr-2"></i> Diseñador de Noticia Visual</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <!-- Columna de Contenido -->
-                        <div class="col-md-8 border-right">
+                        <!-- Columna de Contenido (GrapesJS) -->
+                        <div class="col-md-9 border-right">
                             <div class="form-group mb-4">
-                                <label for="titulo" class="h5">Título de la Noticia <span class="text-danger">*</span></label>
-                                <input type="text" name="titulo" class="form-control form-control-lg p-3 shadow-none border" id="titulo" placeholder="ej: Gran Jornada de Vacunación en Algarrobo" required>
-                                <small class="text-muted"><i class="fas fa-info-circle mr-1"></i> El título debe ser impactante y contener la palabra clave principal.</small>
+                                <label for="titulo" class="h5">Título Impactante <span class="text-danger">*</span></label>
+                                <input type="text" name="titulo" class="form-control form-control-lg p-3 shadow-none border" id="titulo" placeholder="ej: Gran Inauguración del Centro de Salud" required>
                             </div>
                             
-                            <div class="form-group mb-4">
-                                <label for="resumen">Resumen Corto (Lead)</label>
-                                <textarea name="resumen" class="form-control p-3 shadow-none border" id="resumen" rows="3" placeholder="Breve introducción de la noticia..."></textarea>
-                                <small class="text-muted">Este texto se usará para el listado público y redes sociales.</small>
-                            </div>
-
+                            <!-- El Constructor Visual -->
                             <div class="form-group">
-                                <label for="contenido">Cuerpo de la Noticia (Cuerpo Pro)</label>
-                                <textarea name="contenido" id="editor_pro" class="form-control" rows="15" placeholder="Escriba aquí el contenido completo..."></textarea>
+                                <label class="text-primary font-weight-bold mb-2"><i class="fas fa-layer-group"></i> Maquetador de Contenido (Arrastre bloques abajo)</label>
+                                <div id="gjs" style="height: 600px; border: 1px solid #ddd; overflow: hidden; border-radius: 5px;">
+                                    <!-- Contenido por defecto -->
+                                    <div class="container" style="padding: 20px;">
+                                        <h2>Inicie aquí el cuerpo de su noticia...</h2>
+                                        <p>Puede arrastrar imágenes, crear columnas y tablas desde el panel derecho.</p>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="contenido" id="contenido_html">
                             </div>
                         </div>
 
                         <!-- Columna de Configuración y SEO -->
-                        <div class="col-md-4 px-3">
-                            <h5 class="text-muted border-bottom pb-2 mb-3"><i class="fas fa-search mr-1"></i> Configuración SEO y Metatags</h5>
+                        <div class="col-md-3">
+                            <h5 class="text-muted border-bottom pb-2 mb-3"><i class="fas fa-cog mr-1"></i> Organización</h5>
+                            
+                            <div class="form-group mb-4">
+                                <label for="categoria_id">Categoría <span class="text-danger">*</span></label>
+                                <select name="categoria_id" class="form-control border-info" required>
+                                    <option value="">-- Seleccionar Categoría --</option>
+                                    <?php foreach($categorias as $cat): ?>
+                                        <option value="<?= $cat['id'] ?>"><?= $cat['nombre'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <small class="text-muted">Ayuda a organizar su sitio.</small>
+                            </div>
+
+                            <div class="form-group mb-4">
+                                <label for="tags_input">Etiquetas (Separadas por coma)</label>
+                                <input type="text" name="tags" class="form-control border-primary" id="tags_input" placeholder="salud, prevencion, noticias">
+                                
+                                <div class="mt-2" id="popular-tags-cloud">
+                                    <small class="text-muted d-block mb-1">Tags más usados (clic para añadir):</small>
+                                    <?php foreach($popularTags as $ptag): ?>
+                                        <span class="badge badge-light border p-1 px-2 mb-1" style="cursor: pointer;" onclick="addTag('<?= $ptag ?>')">
+                                            <i class="fas fa-plus-circle text-xs mr-1"></i> <?= $ptag ?>
+                                        </span>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+
+                            <h5 class="text-muted border-bottom pb-2 mb-3 mt-4"><i class="fas fa-search mr-1"></i> SEO Metatags</h5>
                             
                             <div class="form-group">
                                 <label for="slug">Slug (URL Amigable)</label>
@@ -66,5 +99,47 @@
                 </div>
             </div>
         </form>
-    </div>
 </div>
+</div>
+
+<script>
+    // Inicializar GrapesJS
+    const editor = grapesjs.init({
+        container: '#gjs',
+        fromElement: true,
+        height: '600px',
+        width: 'auto',
+        storageManager: false,
+        plugins: ['gjs-preset-webpage'],
+        pluginsOpts: {
+            'gjs-preset-webpage': {}
+        },
+        deviceManager: {
+            devices: [
+                { name: 'Desktop', width: '' },
+                { name: 'Mobile', width: '320px', widthMedia: '480px' }
+            ]
+        }
+    });
+
+    // Antes de enviar el formulario, capturamos el HTML
+    document.getElementById('news-form').onsubmit = function() {
+        // Obtenemos el HTML procesado (con CSS inline para que no se rompa nada)
+        const html = editor.getHtml();
+        const css = editor.getCss();
+        document.getElementById('contenido_html').value = `<style>${css}</style>${html}`;
+    };
+
+    function addTag(tag) {
+        const input = document.getElementById('tags_input');
+        if (input.value === '') {
+            input.value = tag;
+        } else {
+            const tags = input.value.split(',').map(t => t.trim());
+            if (!tags.includes(tag)) {
+                tags.push(tag);
+                input.value = tags.join(', ');
+            }
+        }
+    }
+</script>
