@@ -9,8 +9,8 @@ $router->get('/login', [AuthController::class, 'loginView']);
 $router->post('/login', [AuthController::class, 'login']);
 $router->get('/logout', [AuthController::class, 'logout']);
 
-// --- Ruta Principal y Error ---
-$router->get('/', function() { header('Location: /master'); exit; });
+// --- Ruta Principal Dinámica (CMS Ciudadano) ---
+$router->get('/', [\App\Controllers\CmsController::class, 'index']);
 $router->get('/404', function() { return "Error 404: Ruta no encontrada"; });
 
 // --- Panel Maestro (Protegido) ---
