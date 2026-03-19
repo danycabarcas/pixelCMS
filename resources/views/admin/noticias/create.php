@@ -12,98 +12,76 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <!-- Columna de Contenido (GrapesJS) -->
-                        <div class="col-md-9 border-right">
-                            <div class="form-group mb-4">
-                                <label for="titulo" class="h5">Título Impactante <span class="text-danger">*</span></label>
-                                <input type="text" name="titulo" class="form-control form-control-lg p-3 shadow-none border" id="titulo" placeholder="ej: Gran Inauguración del Centro de Salud" required>
+                        <!-- FILA 1: Título y Resumen -->
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label for="titulo" class="h6 font-weight-bold">Título de la Noticia <span class="text-danger">*</span></label>
+                                <input type="text" name="titulo" class="form-control form-control-lg border-primary shadow-none" id="titulo" placeholder="ej: Gran Inauguración del Centro de Salud" required>
                             </div>
-
                             <div class="form-group mb-4">
-                                <label for="resumen" class="font-weight-bold"><i class="fas fa-align-left mr-1"></i> Resumen / Lead (Breve y SEO)</label>
-                                <textarea name="resumen" class="form-control p-3 shadow-none border" id="resumen" rows="2" placeholder="Un pequeño resumen que enganche al ciudadano..."></textarea>
-                                <small class="text-muted">Este texto aparecerá en los listados y redes sociales.</small>
-                            </div>
-                            
-                            <!-- El Constructor Visual Senior con Panel de Bloques -->
-                            <div class="form-group">
-                                <label class="text-primary font-weight-bold mb-2"><i class="fas fa-magic"></i> Diseñador de Contenido (Arrastra desde el panel derecho)</label>
-                                <div class="row no-gutters border rounded" style="background: #f4f6f9;">
-                                    <div class="col-9">
-                                        <div id="gjs" style="height: 600px; overflow: hidden; background: #fff;">
-                                            <div class="container" style="padding: 20px;">
-                                                <h2 style="font-family: sans-serif;">Inicie aquí su noticia...</h2>
-                                                <p style="font-family: sans-serif; color: #666;">Arrastre elementos desde el panel de la derecha para maquetar su contenido profesionalmente.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 border-left" style="height: 600px; overflow-y: auto; background: #fff;">
-                                        <div class="p-2 border-bottom text-center bg-light">
-                                            <small class="font-weight-bold">BLOQUES DE DISEÑO</small>
-                                        </div>
-                                        <div id="blocks"></div>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="contenido" id="contenido_html">
+                                <label for="resumen" class="h6 font-weight-bold">Resumen / Entradilla (Lead)</label>
+                                <textarea name="resumen" class="form-control shadow-none" id="resumen" rows="2" placeholder="Un pequeño resumen que enganche al ciudadano..."></textarea>
                             </div>
                         </div>
 
-                        <!-- Columna de Configuración y SEO -->
-                        <div class="col-md-3">
-                            <h5 class="text-muted border-bottom pb-2 mb-3"><i class="fas fa-cog mr-1"></i> Organización</h5>
-                            
-                            <div class="form-group mb-4">
-                                <label for="categoria_id">Categoría <span class="text-danger">*</span></label>
-                                <select name="categoria_id" class="form-control border-info" required>
-                                    <option value="">-- Seleccionar Categoría --</option>
-                                    <?php foreach($categorias as $cat): ?>
-                                        <option value="<?= $cat['id'] ?>"><?= $cat['nombre'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <small class="text-muted">Ayuda a organizar su sitio.</small>
-                            </div>
-
-                            <div class="form-group mb-4">
-                                <label for="tags_input">Etiquetas (Separadas por coma)</label>
-                                <input type="text" name="tags" class="form-control border-primary" id="tags_input" placeholder="salud, prevencion, noticias">
-                                
-                                <div class="mt-2" id="popular-tags-cloud">
-                                    <small class="text-muted d-block mb-1">Tags más usados (clic para añadir):</small>
-                                    <?php foreach($popularTags as $ptag): ?>
-                                        <span class="badge badge-light border p-1 px-2 mb-1" style="cursor: pointer;" onclick="addTag('<?= $ptag ?>')">
-                                            <i class="fas fa-plus-circle text-xs mr-1"></i> <?= $ptag ?>
-                                        </span>
-                                    <?php endforeach; ?>
+                        <!-- FILA 2: EL CONSTRUCTOR FULL WIDTH -->
+                        <div class="col-md-12 mb-5">
+                            <label class="text-primary font-weight-bold mb-2"><i class="fas fa-magic"></i> DISEÑADOR VISUAL PRO</label>
+                            <div class="row no-gutters border rounded bg-white shadow-sm overflow-hidden">
+                                <div class="col-md-9 border-right">
+                                    <div id="gjs" style="height: 600px; background: #fff;"></div>
+                                </div>
+                                <div class="col-md-3 bg-light" style="height: 600px; overflow-y: auto;">
+                                    <div class="p-2 border-bottom text-center bg-dark text-white text-xs font-weight-bold">
+                                        BLOQUES DISPONIBLES
+                                    </div>
+                                    <div id="blocks"></div>
                                 </div>
                             </div>
+                            <input type="hidden" name="contenido" id="contenido_html">
+                        </div>
 
-                            <h5 class="text-muted border-bottom pb-2 mb-3 mt-4"><i class="fas fa-search mr-1"></i> SEO Metatags</h5>
-                            
-                            <div class="form-group">
-                                <label for="slug">Slug (URL Amigable)</label>
-                                <input type="text" name="slug" class="form-control border-warning shadow-none" id="slug" placeholder="noticia-url-seo">
-                                <small class="text-warning"><i class="fas fa-exclamation-triangle"></i> Deje en blanco para auto-generar del título.</small>
-                            </div>
-
-                            <div class="form-group mt-4">
-                                <label for="meta_title" class="text-success"><i class="fas fa-check-circle"></i> Meta Title para Google</label>
-                                <input type="text" name="meta_title" class="form-control border-success shadow-none" id="meta_title" placeholder="Título SEO optimizado">
-                                <small class="text-muted">Recomendado: Máximo 60 caracteres.</small>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="meta_description" class="text-success"><i class="fas fa-check-circle"></i> Meta Description</label>
-                                <textarea name="meta_description" class="form-control border-success shadow-none font-weight-light" id="meta_description" rows="4" placeholder="Descripción resumida para buscadores..."></textarea>
-                                <small class="text-muted">Máx: 160 caracteres. Resuma el valor de su noticia.</small>
-                            </div>
-
-                            <div class="form-group mt-4">
-                                <label>Imagen Principal (Portada)</label>
-                                <div class="custom-file shadow-none">
-                                    <input type="file" name="imagen_portada" class="custom-file-input" id="imagen_portada">
-                                    <label class="custom-file-label" for="imagen_portada">Elegir archivo...</label>
+                        <!-- FILA 3: CONFIGURACIÓN SEO (Debajo del lienzo) -->
+                        <div class="col-md-12">
+                            <div class="card card-outline card-secondary shadow-sm">
+                                <div class="card-header">
+                                    <h3 class="card-title text-muted"><i class="fas fa-search mr-1"></i> Optimización SEO y Redes Sociales</h3>
                                 </div>
-                                <small class="text-muted">Use una imagen horizontal (ej: 1200x630px).</small>
+                                <div class="card-body bg-light">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Categoría <span class="text-danger">*</span></label>
+                                                <select name="categoria_id" class="form-control border-info" required>
+                                                    <option value="">-- Seleccionar --</option>
+                                                    <?php foreach($categorias as $cat): ?>
+                                                        <option value="<?= $cat['id'] ?>"><?= $cat['nombre'] ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Etiquetas</label>
+                                                <input type="text" name="tags" class="form-control border-info" id="tags_input" placeholder="salud, prevencion">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Slug (URL SEO)</label>
+                                                <input type="text" name="slug" class="form-control border-warning" placeholder="auto-generado si queda vacío">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Meta Title</label>
+                                                <input type="text" name="meta_title" class="form-control border-success">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Meta Description</label>
+                                                <textarea name="meta_description" class="form-control border-success" rows="4"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
