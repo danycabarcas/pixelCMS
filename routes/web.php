@@ -13,6 +13,11 @@ $router->get('/logout', [AuthController::class, 'logout']);
 $router->get('/admin/dashboard', [\App\Controllers\AdminDashboardController::class, 'index'], [AuthMiddleware::class]);
 $router->get('/admin/perfil', [\App\Controllers\AdminDashboardController::class, 'perfil'], [AuthMiddleware::class]);
 
+// --- Gestión de Noticias (Tenants) ---
+$router->get('/admin/noticias', [\App\Controllers\AdminNewsController::class, 'index'], [AuthMiddleware::class]);
+$router->get('/admin/noticias/crear', [\App\Controllers\AdminNewsController::class, 'create'], [AuthMiddleware::class]);
+$router->post('/admin/noticias/crear', [\App\Controllers\AdminNewsController::class, 'create'], [AuthMiddleware::class]);
+
 // --- Ruta Principal Dinámica (CMS Ciudadano) ---
 $router->get('/', [\App\Controllers\CmsController::class, 'index']);
 $router->get('/404', function() { return "Error 404: Ruta no encontrada"; });
