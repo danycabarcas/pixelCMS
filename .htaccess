@@ -1,12 +1,5 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
-    # Redirigir a public/ si no se está ya ahí
-    RewriteRule ^$ public/index.php [L]
-    RewriteRule ^((?!public/).*)$ public/$1 [L]
-
-    # Dentro de public/
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ public/index.php [L]
+    RewriteRule ^$ public/ [L]
+    RewriteRule (.*) public/$1 [L]
 </IfModule>
