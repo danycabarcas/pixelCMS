@@ -20,7 +20,7 @@ class Router {
     }
     public function resolve() {
         $path = $this->request->getPath();
-        $method = $this->request->method();
+        $method = strtolower($this->request->method());
         
         // Limpiar el prefijo /public/ si existe (provocado por algunas redirecciones)
         if (str_starts_with($path, '/public')) {
@@ -38,7 +38,7 @@ class Router {
         $middlewares = $this->middleware[$method][$path] ?? [];
         foreach ($middlewares as $m) { (new $m())->execute(); }
 
-        if (is_string($callback)) { return View::renderView($callback); }
+        if (is_string($callback)) { return View::render($callback); }
         if (is_array($callback)) { $callback[0] = new $callback[0](); }
         return call_user_func($callback, $this->request);
     }
