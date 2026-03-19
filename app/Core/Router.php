@@ -28,18 +28,23 @@ class Router {
             if ($path == '') $path = '/';
         }
 
-        $callback = $this->routes[$method][$path] ?? false;
-        
-        if ($callback === false) { 
-            return "Página no encontrada (404) en: " . $path; 
+        foreach ($this->routes[$method] as $route => $callback) {
+            $routePattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_-]+)', $route);
+            if (preg_match("#^$routePattern$#", $path, $matches)) {
+                array_shift($matches); // Remove full match
+                
+                // Execute Middleware
+                $middlewares = $this->middleware[$method][$route] ?? [];
+                foreach ($middlewares as $m) { (new $m())->execute(); }
+
+                if (is_string($callback)) { return View::render($callback); }
+                if (is_array($callback)) { $callback[0] = new $callback[0](); }
+                
+                // Pass request object + any matched parameters
+                return call_user_func_array($callback, array_merge([$this->request], $matches));
+            }
         }
 
-        // Execute Middleware
-        $middlewares = $this->middleware[$method][$path] ?? [];
-        foreach ($middlewares as $m) { (new $m())->execute(); }
-
-        if (is_string($callback)) { return View::render($callback); }
-        if (is_array($callback)) { $callback[0] = new $callback[0](); }
-        return call_user_func($callback, $this->request);
+        return "Página no encontrada (404) en: " . $path;
     }
 }
