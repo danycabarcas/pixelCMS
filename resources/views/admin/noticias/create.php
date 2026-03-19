@@ -18,11 +18,17 @@
                                 <label for="titulo" class="h5">Título Impactante <span class="text-danger">*</span></label>
                                 <input type="text" name="titulo" class="form-control form-control-lg p-3 shadow-none border" id="titulo" placeholder="ej: Gran Inauguración del Centro de Salud" required>
                             </div>
+
+                            <div class="form-group mb-4">
+                                <label for="resumen" class="font-weight-bold"><i class="fas fa-align-left mr-1"></i> Resumen / Lead (Breve y SEO)</label>
+                                <textarea name="resumen" class="form-control p-3 shadow-none border" id="resumen" rows="2" placeholder="Un pequeño resumen que enganche al ciudadano..."></textarea>
+                                <small class="text-muted">Este texto aparecerá en los listados y redes sociales.</small>
+                            </div>
                             
-                            <!-- El Constructor Visual -->
+                            <!-- El Constructor Visual Simplificado -->
                             <div class="form-group">
-                                <label class="text-primary font-weight-bold mb-2"><i class="fas fa-layer-group"></i> Maquetador de Contenido (Arrastre bloques abajo)</label>
-                                <div id="gjs" style="height: 600px; border: 1px solid #ddd; overflow: hidden; border-radius: 5px;">
+                                <label class="text-primary font-weight-bold mb-2"><i class="fas fa-magic"></i> Diseñador Visual (Arrastre bloques pre-armados)</label>
+                                <div id="gjs" style="height: 500px; border: 1px solid #ddd; overflow: hidden; border-radius: 5px;">
                                     <!-- Contenido por defecto -->
                                     <div class="container" style="padding: 20px;">
                                         <h2>Inicie aquí el cuerpo de su noticia...</h2>
@@ -103,28 +109,51 @@
 </div>
 
 <script>
-    // Inicializar GrapesJS
+    // Inicializar GrapesJS Simplificado (CM Mode)
     const editor = grapesjs.init({
         container: '#gjs',
         fromElement: true,
-        height: '600px',
-        width: 'auto',
+        height: '500px',
         storageManager: false,
         plugins: ['gjs-preset-webpage'],
-        pluginsOpts: {
-            'gjs-preset-webpage': {}
-        },
-        deviceManager: {
-            devices: [
-                { name: 'Desktop', width: '' },
-                { name: 'Mobile', width: '320px', widthMedia: '480px' }
+        blockManager: {
+            appendTo: '#blocks',
+            blocks: [
+                {
+                    id: 'section-img-right',
+                    label: '<b>Sección con Foto a la Derecha</b>',
+                    content: `<div style="display: flex; align-items: center; padding: 20px;">
+                                <div style="flex: 1; padding-right: 20px;"><h2>Título de la sección</h2><p>Texto descriptivo...</p></div>
+                                <div style="flex: 1;"><img src="https://via.placeholder.com/400x300" style="max-width: 100%; border-radius: 8px;"></div>
+                              </div>`,
+                    category: 'Composición'
+                },
+                {
+                    id: 'simple-image',
+                    label: '<b>Imagen Grande con Pie</b>',
+                    content: `<figure style="text-align: center;"><img src="https://via.placeholder.com/800x400" style="max-width: 100%;"><figcaption>Pie de foto aquí...</figcaption></figure>`,
+                    category: 'Multimedia'
+                },
+                {
+                    id: 'quote-block',
+                    label: '<b>Cita Destacada</b>',
+                    content: `<blockquote style="border-left: 5px solid #0943b5; padding: 15px; background: #f9f9f9; font-style: italic;">"Frase célebre de la noticia..."</blockquote>`,
+                    category: 'Elementos'
+                }
             ]
+        },
+        styleManager: {
+            clearProperties: 1, // Limpiar propiedades complejas
+            sectors: [{
+                name: 'Básico',
+                open: true,
+                buildProps: ['font-size', 'color', 'background-color', 'text-align']
+            }]
         }
     });
 
     // Antes de enviar el formulario, capturamos el HTML
     document.getElementById('news-form').onsubmit = function() {
-        // Obtenemos el HTML procesado (con CSS inline para que no se rompa nada)
         const html = editor.getHtml();
         const css = editor.getCss();
         document.getElementById('contenido_html').value = `<style>${css}</style>${html}`;
