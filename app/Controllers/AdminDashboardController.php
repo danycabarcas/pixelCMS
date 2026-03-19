@@ -25,4 +25,15 @@ class AdminDashboardController extends Controller {
             'empresa' => $empresa
         ], 'admin');
     }
+
+    public function perfil() {
+        $db = Database::getInstance();
+        $user_id = Application::$app->session->get('user_id');
+        $user = $db->query("SELECT * FROM users WHERE id = :id", ['id' => $user_id])[0] ?? null;
+        
+        return $this->view('admin.perfil', [
+            'title' => 'Mi Perfil Administrativo',
+            'user' => $user
+        ], 'admin');
+    }
 }

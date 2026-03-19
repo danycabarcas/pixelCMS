@@ -22,7 +22,7 @@
     </div>
 
     <div class="col-12 mt-4">
-        <div class="card card-outline card-primary shadow-sm bg-white p-4">
+                <div class="card card-outline card-primary shadow-sm bg-white p-4">
             <div class="text-center py-5">
                 <i class="fas fa-hospital-alt fa-5x text-primary mb-4"></i>
                 <h1 class="display-4">¡Bienvenidos al Control del Portal!</h1>
@@ -30,8 +30,12 @@
                 <p class="text-muted">Desde aquí podrá gestionar su contenido, responder trámites y personalizar su sitio web.</p>
                 <hr class="my-4 w-50">
                 <div class="btn-group">
-                    <a href="/" target="_blank" class="btn btn-outline-primary"><i class="fas fa-external-link-alt"></i> Ver Sitio Público</a>
-                    <a href="/admin/perfil" class="btn btn-primary"><i class="fas fa-user-edit"></i> Configurar mi Perfil</a>
+                    <a href="http://<?= $empresa['dominio_autorizado'] ?? '/' ?>" target="_blank" class="btn btn-outline-primary shadow-sm">
+                        <i class="fas fa-external-link-alt mr-1"></i> Ver Sitio Público
+                    </a>
+                    <a href="/admin/perfil" class="btn btn-primary shadow-sm">
+                        <i class="fas fa-user-circle mr-1"></i> Configurar mi Perfil
+                    </a>
                 </div>
             </div>
         </div>

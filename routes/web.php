@@ -11,6 +11,7 @@ $router->get('/logout', [AuthController::class, 'logout']);
 
 // --- Panel Administrativo de Clientes (Tenants) ---
 $router->get('/admin/dashboard', [\App\Controllers\AdminDashboardController::class, 'index'], [AuthMiddleware::class]);
+$router->get('/admin/perfil', [\App\Controllers\AdminDashboardController::class, 'perfil'], [AuthMiddleware::class]);
 
 // --- Ruta Principal Dinámica (CMS Ciudadano) ---
 $router->get('/', [\App\Controllers\CmsController::class, 'index']);
