@@ -27,8 +27,8 @@
                         <!-- EL CONSTRUCTOR VISUAL MAESTRO (FULL WIDTH NATIVO) -->
                         <div class="col-md-12 mb-5">
                             <label class="text-primary font-weight-bold mb-2"><i class="fas fa-magic"></i> DISEÑADOR VISUAL PROFESIONAL (Todo integrado)</label>
-                            <div class="border rounded bg-white shadow-sm overflow-hidden">
-                                <div id="gjs" style="height: 600px; background: #fff;"></div>
+                            <div class="border rounded bg-white shadow-sm overflow-hidden" style="min-height: 1200px;">
+                                <div id="gjs" style="background: #fff;"></div>
                             </div>
                             <input type="hidden" name="contenido" id="contenido_html">
                         </div>
@@ -92,7 +92,7 @@
     const editor = grapesjs.init({
         container: '#gjs',
         fromElement: true,
-        height: '700px',
+        height: '1200px', // Aumento drástico de altura para mayor comodidad
         storageManager: false,
         i18n: { locale: 'es' },
         canvas: {
