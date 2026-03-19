@@ -88,27 +88,57 @@
 </div>
 
 <script>
-    // Inicializar GrapesJS Master Pro (Todo integrado)
+    // BLOQUE MAESTRO: PLANTILLA INICIAL (Lo que el usuario ve al abrir)
     const editor = grapesjs.init({
         container: '#gjs',
         fromElement: true,
-        height: '600px',
+        height: '700px',
         storageManager: false,
         i18n: { locale: 'es' },
+        canvas: {
+            styles: [
+                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
+                'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap'
+            ]
+        },
         styleManager: {
             sectors: [
                 { name: 'General', buildProps: ['float', 'display', 'position', 'top', 'right', 'left', 'bottom'] },
                 { name: 'Dimensión', open: false, buildProps: ['width', 'height', 'max-width', 'min-height', 'margin', 'padding'] },
-                { name: 'Tipografía', open: false, buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align', 'text-shadow'] },
+                { name: 'Tipografía', open: true, buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align', 'text-shadow'] },
                 { name: 'Decoración', open: false, buildProps: ['background-color', 'border-radius', 'border', 'box-shadow', 'background'] },
                 { name: 'Extra', open: false, buildProps: ['opacity', 'transition', 'perspective', 'transform'] }
             ]
         }
     });
 
+    // CARGAR PLANTILLA INICIAL
+    editor.on('load', () => {
+        editor.setComponents(`
+            <div style="padding: 20px; font-family: 'Source Sans Pro', sans-serif;">
+                <h1 style="color: #0943b5; font-weight: 600;">Título Impactante del Hospital Algarrobo</h1>
+                <p style="font-size: 1.2rem; color: #555; margin-bottom: 30px;">Aquí puede escribir un pequeño párrafo de introducción que resuma la importancia de esta noticia...</p>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: start;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <img src="https://via.placeholder.com/600x400" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                        <h2 style="color: #333;">Detalles de la gestión</h2>
+                        <p>Escriba aquí el cuerpo detallado de su noticia. Puede borrar estos bloques o agregar más desde el panel de la derecha.</p>
+                        <ul style="padding-left: 20px; color: #444;">
+                            <li>Logro 1: Atención humanizada</li>
+                            <li>Logro 2: Equipos de alta tecnología</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+
     const bm = editor.BlockManager;
 
-    // BLOQUES PRE-ARMADOS INTEGRADOS
+    // ARSENAL DE BLOQUES PRO (NOTICIAS SENIOR)
     bm.add('seccion-noticia', {
         label: '<div class="gjs-block-label"><i class="fas fa-columns"></i><br>Sección Foto</div>',
         content: `<div style="display: flex; flex-wrap: wrap; padding: 20px;">
@@ -118,10 +148,20 @@
         category: 'Diseños Pre-armados'
     });
 
-    bm.add('txt-basico', { label: '<i class="fas fa-align-justify"></i><br>Texto', content: '<p>Escriba su contenido aquí...</p>', category: 'Básicos' });
+    // ELEMENTOS DE TEXTO PRO
+    bm.add('h1-title', { label: '<i class="fas fa-heading"></i><br>Título H1', content: '<h1 style="color:#0943b5">Título Principal</h1>', category: 'Textos Magazine' });
+    bm.add('h2-title', { label: '<i class="fas fa-heading"></i><br>Título H2', content: '<h2 style="color:#333">Subtítulo de Sección</h2>', category: 'Textos Magazine' });
+    bm.add('quote-box', { label: '<i class="fas fa-quote-right"></i><br>Cita Pro', content: '<blockquote style="border-left:5px solid #0943b5; padding:15px; background:#f4f6f9; font-style:italic">"Frase destacada de la noticia..."</blockquote>', category: 'Textos Magazine' });
+    bm.add('highlight-txt', { label: '<i class="fas fa-highlighter"></i><br>Destacado', content: '<div style="background:#fff3cd; padding:15px; border-radius:5px">Párrafo resaltado con información importante.</div>', category: 'Textos Magazine' });
+
+    // ELEMENTOS DE DATOS Y LISTAS
+    bm.add('ul-bullets', { label: '<i class="fas fa-list-ul"></i><br>Viñetas', content: '<ul><li>Elemento 1</li><li>Elemento 2</li><li>Elemento 3</li></ul>', category: 'Organización' });
+    bm.add('pro-table', { label: '<i class="fas fa-table"></i><br>Tabla Pro', content: '<table style="width:100%; border-collapse:collapse; margin:20px 0;"><thead style="background:#0943b5; color:#fff;"><tr><th style="padding:10px; border:1px solid #ddd;">Concepto</th><th style="padding:10px; border:1px solid #ddd;">Valor</th></tr></thead><tbody><tr><td style="padding:10px; border:1px solid #ddd;">Dato A</td><td style="padding:10px; border:1px solid #ddd;">Ejemplo</td></tr></tbody></table>', category: 'Organización' });
+
+    // MULTIMEDIA Y OTROS
     bm.add('img-full', { label: '<i class="fas fa-image"></i><br>Imagen', content: '<img src="https://via.placeholder.com/800x400" style="width: 100%;">', category: 'Básicos' });
-    bm.add('2-cols', { label: '<i class="fas fa-th-large"></i><br>2 Columnas', content: '<div style="display:flex"><div style="flex:1;padding:10px">Col 1</div><div style="flex:1;padding:10px">Col 2</div></div>', category: 'Maquetación' });
-    bm.add('video-yt', { label: '<i class="fab fa-youtube"></i><br>Video', content: '<div style="padding:10px"><iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe></div>', category: 'Multimedia' });
+    bm.add('video-yt', { label: '<i class="fab fa-youtube"></i><br>Video YT', content: '<div style="padding:10px"><iframe width="100%" height="450" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe></div>', category: 'Multimedia' });
+    bm.add('custom-html', { label: '<i class="fas fa-code"></i><br>Inc. HTML', content: '<div style="padding:20px; border:2px dashed #ccc; text-align:center;">--- Pegar su código HTML aquí (Widget, Widget, etc) ---</div>', category: 'Avanzado' });
 
     // Forzar la pestaña de bloques al inicio
     editor.on('load', () => {
