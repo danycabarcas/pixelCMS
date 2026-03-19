@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Pixel CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Outfit', sans-serif; } </style>
+</head>
+<body class="bg-slate-950 text-white">
+    {{content}}
+</body>
+</html>

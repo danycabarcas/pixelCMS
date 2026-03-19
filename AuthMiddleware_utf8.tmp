@@ -1,0 +1,11 @@
+<?php
+namespace App\Middleware;
+use App\Core\Application;
+
+class AuthMiddleware {
+    public function execute() {
+        if (!Application::$app->session->get('user_id')) {
+            Application::$app->response->redirect('/login');
+        }
+    }
+}
