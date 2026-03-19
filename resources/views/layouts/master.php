@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <title><?= $title ?? 'Pixel CMS Master' ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style> 
-        :root { --accent: #2563eb; } 
-        body { background: #0f172a; color: #f8fafc; font-family: 'Outfit', sans-serif; } 
+        :root { --accent: #3b82f6; } 
+        body { background: #0f172a; color: #f8fafc; font-family: 'Outfit', sans-serif; margin: 0; min-height: 100vh; } 
+        .sidebar-link.active { background: #1e293b; color: #3b82f6; border-left: 4px solid #3b82f6; }
     </style>
 </head>
 <body class="flex">
