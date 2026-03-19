@@ -19,6 +19,13 @@ $router->get('/master/empresas/crear', [MasterController::class, 'createEmpresa'
 $router->post('/master/empresas/crear', [MasterController::class, 'createEmpresa'], [AuthMiddleware::class]);
 $router->get('/master/licencias/crear', [MasterController::class, 'createLicencia'], [AuthMiddleware::class]);
 $router->post('/master/licencias/crear', [MasterController::class, 'createLicencia'], [AuthMiddleware::class]);
+
+// --- Módulos Maestro ---
+$router->get('/master/modulos', [\App\Controllers\ModulosController::class, 'index'], [AuthMiddleware::class]);
+$router->get('/master/modulos/crear', [\App\Controllers\ModulosController::class, 'create'], [AuthMiddleware::class]);
+$router->post('/master/modulos/crear', [\App\Controllers\ModulosController::class, 'create'], [AuthMiddleware::class]);
+
+// --- CMS Pages ---
 $router->get('/admin/pages', [PageController::class, 'index'], [AuthMiddleware::class]);
 $router->get('/admin/pages/create', [PageController::class, 'create'], [AuthMiddleware::class]);
 $router->post('/admin/pages/create', [PageController::class, 'create'], [AuthMiddleware::class]);

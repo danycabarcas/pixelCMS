@@ -43,9 +43,15 @@
     <div class="sidebar">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+          <li class="nav-header text-uppercase text-muted pl-3"><small>Arquitectura SaaS</small></li>
           <li class="nav-item">
-            <a href="/master" class="nav-link active"><i class="nav-icon fas fa-building"></i><p>Gestión de Empresas</p></a>
+            <a href="/master" class="nav-link"><i class="nav-icon fas fa-building"></i><p>Gestión de Empresas</p></a>
           </li>
+          <li class="nav-item">
+            <a href="/master/modulos" class="nav-link"><i class="nav-icon fas fa-cubes text-success"></i><p>Catálogo de Módulos</p></a>
+          </li>
+          
+          <li class="nav-header text-uppercase text-muted pl-3 mt-2"><small>Portal Local</small></li>
           <li class="nav-item">
             <a href="/admin/pages" class="nav-link"><i class="nav-icon fas fa-file-alt"></i><p>Páginas del CMS</p></a>
           </li>
