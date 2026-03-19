@@ -27,25 +27,43 @@ class AdminNewsController extends Controller {
         ], 'admin');
     }
 
+    public function storeCategory(Request $request) {
+        $db = Database::getInstance();
+        $empresaId = Application::$app->session->get('empresa_id');
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        if (empty($data['nombre'])) {
+            header('Content-Type: application/json');
+            return json_encode(['success' => false, 'error' => 'Nombre requerido']);
+        }
+
+        $slug = $this->generateSlug($data['nombre']);
+        
+        try {
+            $db->execute("
+                INSERT INTO categorias_noticias (empresa_id, nombre, slug) 
+                VALUES (:eid, :nom, :slug)
+            ", [
+                'eid' => $empresaId,
+                'nom' => $data['nombre'],
+                'slug' => $slug
+            ]);
+            
+            $results = $db->query("SELECT id FROM categorias_noticias WHERE slug = :slug AND empresa_id = :eid ORDER BY id DESC LIMIT 1", ['slug' => $slug, 'eid' => $empresaId]);
+            $id = $results[0]['id'];
+            
+            header('Content-Type: application/json');
+            return json_encode(['success' => true, 'id' => $id]);
+        } catch (\Exception $e) {
+            header('Content-Type: application/json');
+            return json_encode(['success' => false, 'error' => $e->getMessage()]);
+        }
+    }
+
     public function create(Request $request) {
         $db = Database::getInstance();
         $empresaId = Application::$app->session->get('empresa_id');
         
-        // Obtenemos categorías de esta empresa
-        $categorias = $db->query("SELECT * FROM categorias_noticias WHERE empresa_id = :eid", ['eid' => $empresaId]);
-        
-        // Obtenemos una lista de tags únicos usados anteriormente (para la nube de tags)
-        $rawTags = $db->query("SELECT tags FROM noticias WHERE empresa_id = :eid AND tags IS NOT NULL", ['eid' => $empresaId]);
-        $popularTags = [];
-        foreach($rawTags as $rt) {
-            $tagsArray = explode(',', $rt['tags']);
-            foreach($tagsArray as $t) {
-                $t = trim($t);
-                if(!empty($t) && !in_array($t, $popularTags)) $popularTags[] = $t;
-            }
-        }
-        $popularTags = array_slice($popularTags, 0, 10); // Top 10 tags
-
         if ($request->method() === 'POST') {
             $data = $request->all();
             $slug = !empty($data['slug']) ? $data['slug'] : $this->generateSlug($data['titulo']);
@@ -74,17 +92,34 @@ class AdminNewsController extends Controller {
                 'eid'  => $empresaId,
                 'tit'  => $data['titulo'],
                 'slug' => $slug,
-                'res'  => $data['resumen'],
+                'res'  => $data['resumen'] ?? '',
                 'html' => $data['contenido'],
                 'img'  => $uploadedPath,
                 'mtit' => $data['meta_title'] ?? $data['titulo'],
-                'mdes' => $data['meta_description'] ?? $data['resumen'],
+                'mdes' => $data['meta_description'] ?? ($data['resumen'] ?? ''),
                 'cat'  => !empty($data['categoria_id']) ? $data['categoria_id'] : null,
                 'tags' => $data['tags'] ?? ''
             ]);
 
             return $this->redirect('/admin/noticias');
         }
+
+        // Obtenemos categorías de esta empresa
+        $categorias = $db->query("SELECT * FROM categorias_noticias WHERE empresa_id = :eid", ['eid' => $empresaId]);
+        
+        // Obtenemos una lista de tags únicos usados anteriormente (para la nube de tags)
+        $popularTagsResult = $db->query("SELECT tags FROM noticias WHERE empresa_id = :eid AND tags != '' LIMIT 50", ['eid' => $empresaId]);
+        
+        $tagsArray = [];
+        foreach($popularTagsResult as $row) {
+            $rowTags = explode(',', $row['tags']);
+            foreach($rowTags as $tag) {
+                $tag = trim($tag);
+                if (!empty($tag)) $tagsArray[$tag] = ($tagsArray[$tag] ?? 0) + 1;
+            }
+        }
+        arsort($tagsArray);
+        $popularTags = array_keys(array_slice($tagsArray, 0, 10));
 
         return $this->view('admin.noticias.create', [
             'title' => 'Nueva Noticia Magazine',

@@ -43,8 +43,13 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Categoría <span class="text-danger">*</span></label>
-                                                <select name="categoria_id" class="form-control border-info" required>
+                                                <label class="d-flex justify-content-between align-items-center">
+                                                    Categoría <span class="text-danger">*</span>
+                                                    <button type="button" class="btn btn-xs btn-link p-0 text-success" data-toggle="modal" data-target="#modal-categoria">
+                                                        <i class="fas fa-plus-circle mr-1"></i> Nueva
+                                                    </button>
+                                                </label>
+                                                <select name="categoria_id" class="form-control border-info" id="select_categoria" required>
                                                     <option value="">-- Seleccionar --</option>
                                                     <?php foreach($categorias as $cat): ?>
                                                         <option value="<?= $cat['id'] ?>"><?= $cat['nombre'] ?></option>
@@ -84,10 +89,55 @@
                 </div>
             </div>
         </form>
-</div>
+
+    <!-- MODAL CATEGORIA EXPRESS -->
+    <div class="modal fade" id="modal-categoria" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-plus-circle mr-1"></i> Nueva Categoría de Noticia</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre de la Categoría</label>
+                        <input type="text" id="nueva_cat_nombre" class="form-control" placeholder="ej: Convocatorias">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-success" onclick="guardarCategoriaExpress()">Guardar Categoría</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+    async function guardarCategoriaExpress() {
+        const nombre = document.getElementById('nueva_cat_nombre').value;
+        if (!nombre) return alert('Escribe un nombre');
+
+        try {
+            const response = await fetch('/admin/noticias/categoria/crear', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre })
+            });
+            const res = await response.json();
+            
+            if (res.success) {
+                const select = document.getElementById('select_categoria');
+                const option = new Option(nombre, res.id, true, true);
+                select.add(option);
+                $('#modal-categoria').modal('hide');
+                document.getElementById('nueva_cat_nombre').value = '';
+            } else {
+                alert('Error al crear categoría: ' + res.error);
+            }
+        } catch (e) { console.error(e); }
+    }
+
     // BLOQUE MAESTRO: PLANTILLA INICIAL (Lo que el usuario ve al abrir)
     const editor = grapesjs.init({
         container: '#gjs',

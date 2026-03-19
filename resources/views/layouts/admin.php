@@ -48,6 +48,44 @@
           <li class="nav-item">
             <a href="/admin/pages" class="nav-link active"><i class="nav-icon fas fa-file-alt"></i><p>Gestionar Páginas</p></a>
           </li>
+          <!-- Módulo de Noticias (SaaS Pro) -->
+          <li class="nav-item">
+              <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-newspaper"></i>
+                  <p>
+                      Noticias
+                      <i class="right fas fa-angle-left"></i>
+                  </p>
+              </a>
+              <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                      <a href="/admin/noticias" class="nav-link">
+                          <i class="far fa-circle nav-icon text-info"></i>
+                          <p>Gestor de Noticias</p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="/admin/noticias/crear" class="nav-link">
+                          <i class="far fa-circle nav-icon text-success"></i>
+                          <p>Redactar Nueva</p>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="/admin/categorias" class="nav-link">
+                          <i class="far fa-circle nav-icon text-warning"></i>
+                          <p>Categorías</p>
+                      </a>
+                  </li>
+              </ul>
+          </li>
+
+          <li class="nav-header">CONFIGURACIÓN</li>
+          <li class="nav-item">
+              <a href="/admin/configuracion" class="nav-link">
+                  <i class="nav-icon fas fa-cogs"></i>
+                  <p>Mi Sitio</p>
+              </a>
+          </li>
         </ul>
       </nav>
     </div>
