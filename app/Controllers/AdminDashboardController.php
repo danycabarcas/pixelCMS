@@ -11,11 +11,17 @@ class AdminDashboardController extends Controller {
         $db = Database::getInstance();
         $empresa = SiteSelector::identify();
         
-        // Si por alguna razón un admin entra por el dominio equivocado, 
-        // podrías validarlo aquí. Pero SiteSelector ya nos da la empresa del host.
+        // Si entramos por un dominio que no es el autorizado (ej: localhost o IP)
+        // buscamos la empresa por el ID de la sesión del usuario logueado.
+        if (!$empresa) {
+            $empresaId = Application::$app->session->get('empresa_id');
+            if ($empresaId) {
+                $empresa = $db->query("SELECT * FROM empresas WHERE id = :id", ['id' => $empresaId])[0] ?? null;
+            }
+        }
         
         return $this->view('admin.dashboard', [
-            'title' => 'Dashboard Co-Administrador',
+            'title' => 'Dashboard Gestion de Entidad',
             'empresa' => $empresa
         ], 'admin');
     }

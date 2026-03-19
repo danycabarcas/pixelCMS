@@ -26,7 +26,7 @@
             <div class="text-center py-5">
                 <i class="fas fa-hospital-alt fa-5x text-primary mb-4"></i>
                 <h1 class="display-4">¡Bienvenidos al Control del Portal!</h1>
-                <p class="lead">Usted está administrando el sitio oficial de <b><?= $empresa['nombre'] ?></b></p>
+                <p class="lead">Usted está administrando el sitio oficial de <b><?= $empresa['nombre'] ?? 'Su Entidad' ?></b></p>
                 <p class="text-muted">Desde aquí podrá gestionar su contenido, responder trámites y personalizar su sitio web.</p>
                 <hr class="my-4 w-50">
                 <div class="btn-group">
