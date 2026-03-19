@@ -25,14 +25,23 @@
                                 <small class="text-muted">Este texto aparecerá en los listados y redes sociales.</small>
                             </div>
                             
-                            <!-- El Constructor Visual Simplificado -->
+                            <!-- El Constructor Visual Senior con Panel de Bloques -->
                             <div class="form-group">
-                                <label class="text-primary font-weight-bold mb-2"><i class="fas fa-magic"></i> Diseñador Visual (Arrastre bloques pre-armados)</label>
-                                <div id="gjs" style="height: 500px; border: 1px solid #ddd; overflow: hidden; border-radius: 5px;">
-                                    <!-- Contenido por defecto -->
-                                    <div class="container" style="padding: 20px;">
-                                        <h2>Inicie aquí el cuerpo de su noticia...</h2>
-                                        <p>Puede arrastrar imágenes, crear columnas y tablas desde el panel derecho.</p>
+                                <label class="text-primary font-weight-bold mb-2"><i class="fas fa-magic"></i> Diseñador de Contenido (Arrastra desde el panel derecho)</label>
+                                <div class="row no-gutters border rounded" style="background: #f4f6f9;">
+                                    <div class="col-9">
+                                        <div id="gjs" style="height: 600px; overflow: hidden; background: #fff;">
+                                            <div class="container" style="padding: 20px;">
+                                                <h2 style="font-family: sans-serif;">Inicie aquí su noticia...</h2>
+                                                <p style="font-family: sans-serif; color: #666;">Arrastre elementos desde el panel de la derecha para maquetar su contenido profesionalmente.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 border-left" style="height: 600px; overflow-y: auto; background: #fff;">
+                                        <div class="p-2 border-bottom text-center bg-light">
+                                            <small class="font-weight-bold">BLOQUES DE DISEÑO</small>
+                                        </div>
+                                        <div id="blocks"></div>
                                     </div>
                                 </div>
                                 <input type="hidden" name="contenido" id="contenido_html">
@@ -109,54 +118,51 @@
 </div>
 
 <script>
-    // Inicializar GrapesJS Simplificado (CM Mode)
+    // Inicializar GrapesJS Senior (CM Mode 2.0)
     const editor = grapesjs.init({
         container: '#gjs',
         fromElement: true,
-        height: '500px',
+        height: '600px',
         storageManager: false,
-        plugins: ['gjs-preset-webpage'],
         blockManager: {
-            appendTo: '#blocks',
-            blocks: [
-                {
-                    id: 'section-img-right',
-                    label: '<b>Sección con Foto a la Derecha</b>',
-                    content: `<div style="display: flex; align-items: center; padding: 20px;">
-                                <div style="flex: 1; padding-right: 20px;"><h2>Título de la sección</h2><p>Texto descriptivo...</p></div>
-                                <div style="flex: 1;"><img src="https://via.placeholder.com/400x300" style="max-width: 100%; border-radius: 8px;"></div>
-                              </div>`,
-                    category: 'Composición'
-                },
-                {
-                    id: 'simple-image',
-                    label: '<b>Imagen Grande con Pie</b>',
-                    content: `<figure style="text-align: center;"><img src="https://via.placeholder.com/800x400" style="max-width: 100%;"><figcaption>Pie de foto aquí...</figcaption></figure>`,
-                    category: 'Multimedia'
-                },
-                {
-                    id: 'quote-block',
-                    label: '<b>Cita Destacada</b>',
-                    content: `<blockquote style="border-left: 5px solid #0943b5; padding: 15px; background: #f9f9f9; font-style: italic;">"Frase célebre de la noticia..."</blockquote>`,
-                    category: 'Elementos'
+            appendTo: '#blocks'
+        },
+        i18n: {
+            locale: 'es',
+            messages: {
+                es: {
+                    blockManager: { labels: { 'text': 'Texto', 'image': 'Imagen', 'column1': '1 Columna', 'column2': '2 Columnas' } },
+                    styleManager: { sectors: { 'general': 'General', 'dimension': 'Dimensión', 'typography': 'Tipografía' } }
                 }
-            ]
+            }
         },
         styleManager: {
-            clearProperties: 1, // Limpiar propiedades complejas
             sectors: [{
-                name: 'Básico',
+                name: 'Estilos de Texto',
                 open: true,
-                buildProps: ['font-size', 'color', 'background-color', 'text-align']
+                buildProps: ['font-size', 'color', 'text-align', 'font-family']
             }]
         }
     });
 
-    // Antes de enviar el formulario, capturamos el HTML
+    const bm = editor.BlockManager;
+
+    // BLOQUES PRE-ARMADOS (Proyectos Senior)
+    bm.add('seccion-noticia', {
+        label: '<div class="gjs-block-label">Sección con Foto</div>',
+        content: `<div style="display: flex; flex-wrap: wrap; padding: 20px;">
+                    <div style="flex: 1; min-width: 300px;"><h2>Título Seccion</h2><p>Texto aquí...</p></div>
+                    <div style="flex: 1; min-width: 300px;"><img src="https://via.placeholder.com/500x300" style="width: 100%;"></div>
+                  </div>`,
+        category: 'Maquetación'
+    });
+
+    bm.add('txt-basico', { label: 'Texto Simple', content: '<p>Escriba su contenido aquí...</p>', category: 'Básicos' });
+    bm.add('img-full', { label: 'Imagen Full', content: '<img src="https://via.placeholder.com/800x400" style="width: 100%;">', category: 'Básicos' });
+    bm.add('2-cols', { label: '2 Columnas', content: '<div style="display:flex"><div style="flex:1;padding:10px">Col 1</div><div style="flex:1;padding:10px">Col 2</div></div>', category: 'Maquetación' });
+
     document.getElementById('news-form').onsubmit = function() {
-        const html = editor.getHtml();
-        const css = editor.getCss();
-        document.getElementById('contenido_html').value = `<style>${css}</style>${html}`;
+        document.getElementById('contenido_html').value = `<style>${editor.getCss()}</style>${editor.getHtml()}`;
     };
 
     function addTag(tag) {
