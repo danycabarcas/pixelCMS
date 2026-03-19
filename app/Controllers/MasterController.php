@@ -58,16 +58,14 @@ class MasterController extends Controller
             $codigo = strtoupper(bin2hex(random_bytes(8)));
             
             $db->execute("
-                INSERT INTO licencias (empresa_id, dominio, codigo_licencia, fecha_vencimiento, plan_nombre, cuentas_correo, modulos_habilitados)
-                VALUES (:empresa_id, :dominio, :codigo_licencia, :fecha_vencimiento, :plan_nombre, :cuentas_correo, :modulos)
+                INSERT INTO licencias (empresa_id, codigo_licencia, fecha_inicio, fecha_vencimiento, modulos_json, status, created_at, periodo_gracia_dias)
+                VALUES (:empresa_id, :codigo_licencia, NOW(), :fecha_vencimiento, :modulos, 1, NOW(), :gracia)
             ", [
                 'empresa_id'        => $data['empresa_id'],
-                'dominio'           => $data['dominio'],
                 'codigo_licencia'   => $codigo,
                 'fecha_vencimiento' => $data['fecha_vencimiento'],
-                'plan_nombre'       => $data['plan_nombre'],
-                'cuentas_correo'    => $data['cuentas_correo'],
-                'modulos'           => json_encode($data['modulos'] ?? [])
+                'modulos'           => json_encode($data['modulos'] ?? []),
+                'gracia'            => $data['periodo_gracia'] ?? 7
             ]);
             
             return $this->redirect('/master');

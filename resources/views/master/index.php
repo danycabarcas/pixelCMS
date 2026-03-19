@@ -59,14 +59,20 @@
                     <tbody>
                         <?php 
                             $db = \App\Core\Database::getInstance();
-                            $licencias = $db->query("SELECT l.*, e.nombre as empresa FROM licencias l JOIN empresas e ON l.empresa_id = e.id ORDER BY l.created_at DESC");
+                            $licencias = $db->query("
+                                SELECT l.*, e.nombre as empresa, e.dominio_autorizado as dominio, COALESCE(p.nombre, 'Sin Plan') as plan_nombre
+                                FROM licencias l 
+                                JOIN empresas e ON l.empresa_id = e.id 
+                                LEFT JOIN planes p ON l.plan_id = p.id
+                                ORDER BY l.created_at DESC
+                            ");
                         ?>
                         <?php if (empty($licencias)): ?>
                             <tr><td colspan="5" class="text-center py-4 text-muted">No hay licencias generadas aún.</td></tr>
                         <?php else: ?>
                             <?php foreach ($licencias as $lic): ?>
                                 <tr>
-                                    <td><strong><?= htmlspecialchars($lic['dominio']) ?></strong><br><small class="text-muted"><?= htmlspecialchars($lic['empresa']) ?></small></td>
+                                    <td><strong><?= htmlspecialchars($lic['dominio'] ?? 'Sin dominio') ?></strong><br><small class="text-muted"><?= htmlspecialchars($lic['empresa']) ?></small></td>
                                     <td><code><?= htmlspecialchars($lic['codigo_licencia']) ?></code></td>
                                     <td><?= htmlspecialchars($lic['fecha_vencimiento']) ?></td>
                                     <td><span class="badge badge-info"><?= htmlspecialchars($lic['plan_nombre']) ?></span></td>
