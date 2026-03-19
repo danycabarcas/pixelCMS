@@ -20,7 +20,10 @@ class View
         $content = ob_get_clean();
 
         if ($layout && file_exists($layoutPath)) {
+            ob_start();
             require $layoutPath;
+            $layoutContent = ob_get_clean();
+            echo str_replace('{{content}}', $content, $layoutContent);
         } else {
             echo $content;
         }
