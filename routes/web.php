@@ -1,6 +1,6 @@
 <?php
 /**
- * PixelCMS - The COMPLETE Route Map
+ * PixelCMS - The CORRECTED Route Map
  * Core Engine
  */
 use App\Core\Application;
@@ -8,14 +8,15 @@ use App\Controllers\AdminDashboardController;
 use App\Controllers\AdminNewsController;
 use App\Controllers\AdminCategoryController;
 use App\Controllers\PageController;
+use App\Controllers\CmsController;
 use App\Middleware\AuthMiddleware;
 
 // 1. Instanciar el Router a través del núcleo Master
 $router = Application::$app->router;
 
 // --- EJE DE NAVEGACIÓN ADMINISTRATIVA (PRO) ---
-$router->get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'], [AuthMiddleware::class]);
-$router->get('/admin/configuracion', [AdminDashboardController::class, 'configuracion'], [AuthMiddleware::class]);
+$router->get('/admin/dashboard', [AdminDashboardController::class, 'index'], [AuthMiddleware::class]);
+$router->get('/admin/perfil', [AdminDashboardController::class, 'perfil'], [AuthMiddleware::class]);
 
 // --- MÓDULO DE PÁGINAS ---
 $router->get('/admin/pages', [PageController::class, 'index'], [AuthMiddleware::class]);
@@ -33,5 +34,5 @@ $router->get('/admin/categorias', [AdminCategoryController::class, 'index'], [Au
 $router->post('/admin/categorias/guardar', [AdminCategoryController::class, 'store'], [AuthMiddleware::class]);
 $router->post('/admin/categorias/eliminar', [AdminCategoryController::class, 'delete'], [AuthMiddleware::class]);
 
-// --- RUTAS PÚBLICAS ---
-$router->get('/', [AdminController::class, 'home']);
+// --- RUTAS PÚBLICAS (EL PORTAL) ---
+$router->get('/', [CmsController::class, 'index']);
