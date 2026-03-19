@@ -6,13 +6,17 @@ use Dotenv\Dotenv;
 
 class Application
 {
+    public static Application $app;
     private static ?Application $instance = null;
     public Router $router;
     public Request $request;
     public Response $response;
+    public Session $session;
 
     private function __construct()
     {
+        self::$app = $this;
+        $this->session = new Session();
         if (file_exists(BASE_PATH . '/.env')) {
             $dotenv = Dotenv::createImmutable(BASE_PATH);
             $dotenv->load();
