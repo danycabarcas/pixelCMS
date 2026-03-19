@@ -9,11 +9,11 @@ class Database
 
     private function __construct()
     {
-        $host = $_ENV['DB_HOST'] ?? 'localhost';
-        $port = $_ENV['DB_PORT'] ?? 5432;
-        $name = $_ENV['DB_NAME'] ?? 'pixelcms';
-        $user = $_ENV['DB_USER'] ?? 'postgres';
-        $pass = $_ENV['DB_PASS'] ?? '';
+        $host = $_ENV['DB_HOST'] ?? $_SERVER['DB_HOST'] ?? 'localhost';
+        $port = $_ENV['DB_PORT'] ?? $_SERVER['DB_PORT'] ?? 5432;
+        $name = $_ENV['DB_NAME'] ?? $_SERVER['DB_NAME'] ?? 'postgres';
+        $user = $_ENV['DB_USER'] ?? $_SERVER['DB_USER'] ?? 'postgres';
+        $pass = $_ENV['DB_PASS'] ?? $_SERVER['DB_PASS'] ?? '';
 
         $dsn = "pgsql:host={$host};port={$port};dbname={$name}";
 
