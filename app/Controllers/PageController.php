@@ -15,6 +15,26 @@ class PageController extends Controller
         return $this->view('admin.pages.index', ['pages' => $pages], 'admin');
     }
 
+    public function create(Request $request)
+    {
+        if ($request->method() === 'POST') {
+            $db = Database::getInstance();
+            $data = $request->all();
+            
+            $db->execute("
+                INSERT INTO paginas (titulo, slug, content_html, content_css, status, created_at)
+                VALUES (:title, :slug, '', '', 0, NOW())
+            ", [
+                'title' => $data['titulo'],
+                'slug'  => $data['slug']
+            ]);
+            
+            return $this->redirect('/admin/pages');
+        }
+        
+        return $this->view('admin.pages.create', ['title' => 'Nueva Página'], 'admin');
+    }
+
     public function edit(Request $request, $id)
     {
         $db = Database::getInstance();

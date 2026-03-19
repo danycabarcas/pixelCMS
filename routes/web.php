@@ -20,6 +20,11 @@ $router->post('/master/empresas/crear', [MasterController::class, 'createEmpresa
 $router->get('/master/licencias/crear', [MasterController::class, 'createLicencia'], [AuthMiddleware::class]);
 $router->post('/master/licencias/crear', [MasterController::class, 'createLicencia'], [AuthMiddleware::class]);
 $router->get('/admin/pages', [PageController::class, 'index'], [AuthMiddleware::class]);
+$router->get('/admin/pages/create', [PageController::class, 'create'], [AuthMiddleware::class]);
+$router->post('/admin/pages/create', [PageController::class, 'create'], [AuthMiddleware::class]);
+$router->get('/admin/pages/edit/{id}', [PageController::class, 'edit'], [AuthMiddleware::class]);
+$router->post('/admin/pages/save/{id}', [PageController::class, 'save'], [AuthMiddleware::class]);
+$router->get('/{slug}', [PageController::class, 'show']);
 
 // --- Otros Módulos ---
 $router->get('/admin/files', [\App\Controllers\FileManagerController::class, 'index'], [AuthMiddleware::class]);
