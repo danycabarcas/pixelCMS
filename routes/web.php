@@ -9,6 +9,9 @@ $router->get('/login', [AuthController::class, 'loginView']);
 $router->post('/login', [AuthController::class, 'login']);
 $router->get('/logout', [AuthController::class, 'logout']);
 
+// --- Panel Administrativo de Clientes (Tenants) ---
+$router->get('/admin/dashboard', [\App\Controllers\AdminDashboardController::class, 'index'], [AuthMiddleware::class]);
+
 // --- Ruta Principal Dinámica (CMS Ciudadano) ---
 $router->get('/', [\App\Controllers\CmsController::class, 'index']);
 $router->get('/404', function() { return "Error 404: Ruta no encontrada"; });
