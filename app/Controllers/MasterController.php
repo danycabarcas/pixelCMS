@@ -123,10 +123,11 @@ class MasterController extends Controller
                         'uid'  => $admin['id']
                     ]);
                 } else {
-                    $db->execute("INSERT INTO users (username, password, role, empresa_id, created_at) VALUES (:user, :pass, 'admin_empresa', :eid, NOW())", [
+                    $db->execute("INSERT INTO users (username, password, role, empresa_id, nombre, created_at) VALUES (:user, :pass, 'admin_empresa', :eid, :nom, NOW())", [
                         'user' => $data['admin_user'],
                         'pass' => password_hash($data['admin_pass'], PASSWORD_DEFAULT),
-                        'eid'  => $id
+                        'eid'  => $id,
+                        'nom'  => 'Admin ' . $empresa['nombre']
                     ]);
                 }
             }
