@@ -1,81 +1,86 @@
-<h1>Panel de Control Maestro</h1>
-
-<div class="card">
-    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h2>Empresas Registradas</h2>
-        <a href="/master/empresas/crear" class="btn btn-primary">Añadir Empresa</a>
+<div class="row">
+    <!-- Empresas -->
+    <div class="col-md-12">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-building mr-2"></i> Empresas Registradas</h3>
+                <div class="card-tools">
+                    <a href="/master/empresas/crear" class="btn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i> Añadir Empresa</a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover m-0">
+                    <thead>
+                        <tr>
+                            <th>Nombre de Empresa</th>
+                            <th>NIT / Identificación</th>
+                            <th>Email de Contacto</th>
+                            <th class="text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($empresas)): ?>
+                            <tr><td colspan="4" class="text-center py-4 text-muted">No hay empresas registradas aún.</td></tr>
+                        <?php else: ?>
+                            <?php foreach ($empresas as $empresa): ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($empresa['nombre']) ?></strong></td>
+                                    <td><code><?= htmlspecialchars($empresa['nit']) ?></code></td>
+                                    <td><?= htmlspecialchars($empresa['email_contacto']) ?></td>
+                                    <td class="text-right">
+                                        <a href="/master/licencias/crear?empresa_id=<?= $empresa['id'] ?>" class="btn btn-outline-primary btn-xs">Generar Licencia</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 3rem;">
-        <thead>
-            <tr style="text-align: left; border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
-                <th style="padding: 1rem;">Empresa</th>
-                <th style="padding: 1rem;">NIT</th>
-                <th style="padding: 1rem;">Email</th>
-                <th style="padding: 1rem;">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (empty($empresas)): ?>
-                <tr>
-                    <td colspan="4" style="padding: 2rem; text-align: center; color: var(--text-muted);">No hay empresas registradas aún.</td>
-                </tr>
-            <?php else: ?>
-                <?php foreach ($empresas as $empresa): ?>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 1rem;"><?= htmlspecialchars($empresa['nombre']) ?></td>
-                        <td style="padding: 1rem;"><?= htmlspecialchars($empresa['nit']) ?></td>
-                        <td style="padding: 1rem;"><?= htmlspecialchars($empresa['email_contacto']) ?></td>
-                        <td style="padding: 1rem;">
-                            <a href="/master/licencias/crear?empresa_id=<?= $empresa['id'] ?>" style="color: var(--accent-primary); text-decoration: none;">Generar Licencia</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
-
-    <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h2>Licencias Activas</h2>
+    <!-- Licencias -->
+    <div class="col-md-12 mt-4">
+        <div class="card card-outline card-info">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-key mr-2"></i> Licencias Activas</h3>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover m-0">
+                    <thead>
+                        <tr>
+                            <th>Dominio / Empresa</th>
+                            <th>Código Maestro</th>
+                            <th>Vencimiento</th>
+                            <th>Plan</th>
+                            <th class="text-center">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            $db = \App\Core\Database::getInstance();
+                            $licencias = $db->query("SELECT l.*, e.nombre as empresa FROM licencias l JOIN empresas e ON l.empresa_id = e.id ORDER BY l.created_at DESC");
+                        ?>
+                        <?php if (empty($licencias)): ?>
+                            <tr><td colspan="5" class="text-center py-4 text-muted">No hay licencias generadas aún.</td></tr>
+                        <?php else: ?>
+                            <?php foreach ($licencias as $lic): ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($lic['dominio']) ?></strong><br><small class="text-muted"><?= htmlspecialchars($lic['empresa']) ?></small></td>
+                                    <td><code><?= htmlspecialchars($lic['codigo_licencia']) ?></code></td>
+                                    <td><?= htmlspecialchars($lic['fecha_vencimiento']) ?></td>
+                                    <td><span class="badge badge-info"><?= htmlspecialchars($lic['plan_nombre']) ?></span></td>
+                                    <td class="text-center">
+                                        <span class="badge badge-<?= $lic['status'] == 1 ? 'success' : 'danger' ?>">
+                                            <?= $lic['status'] == 1 ? 'Activa' : 'Inactiva' ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="text-align: left; border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
-                <th style="padding: 1rem;">Dominio</th>
-                <th style="padding: 1rem;">Código</th>
-                <th style="padding: 1rem;">Vencimiento</th>
-                <th style="padding: 1rem;">Plan</th>
-                <th style="padding: 1rem;">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-                $db = \App\Core\Database::getInstance();
-                $licencias = $db->query("SELECT l.*, e.nombre as empresa FROM licencias l JOIN empresas e ON l.empresa_id = e.id ORDER BY l.created_at DESC");
-            ?>
-            <?php if (empty($licencias)): ?>
-                <tr>
-                    <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">No hay licencias generadas aún.</td>
-                </tr>
-            <?php else: ?>
-                <?php foreach ($licencias as $lic): ?>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 1rem;">
-                            <strong><?= htmlspecialchars($lic['dominio']) ?></strong><br>
-                            <small style="color:var(--text-muted)"><?= htmlspecialchars($lic['empresa']) ?></small>
-                        </td>
-                        <td style="padding: 1rem;"><code style="background:var(--bg-color); padding:0.2rem 0.5rem; border-radius:4px;"><?= htmlspecialchars($lic['codigo_licencia']) ?></code></td>
-                        <td style="padding: 1rem;"><?= htmlspecialchars($lic['fecha_vencimiento']) ?></td>
-                        <td style="padding: 1rem;"><?= htmlspecialchars($lic['plan_nombre']) ?></td>
-                        <td style="padding: 1rem;">
-                            <span style="padding: 0.2rem 0.5rem; border-radius: 1rem; font-size: 0.8rem; background: <?= $lic['status'] == 1 ? '#059669' : '#dc2626' ?>; color: white;">
-                                <?= $lic['status'] == 1 ? 'Activa' : 'Inactiva' ?>
-                            </span>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
 </div>

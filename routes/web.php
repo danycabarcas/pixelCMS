@@ -15,6 +15,10 @@ $router->get('/404', function() { return "Error 404: Ruta no encontrada"; });
 
 // --- Panel Maestro (Protegido) ---
 $router->get('/master', [MasterController::class, 'index'], [AuthMiddleware::class]);
+$router->get('/master/empresas/crear', [MasterController::class, 'createEmpresa'], [AuthMiddleware::class]);
+$router->post('/master/empresas/crear', [MasterController::class, 'createEmpresa'], [AuthMiddleware::class]);
+$router->get('/master/licencias/crear', [MasterController::class, 'createLicencia'], [AuthMiddleware::class]);
+$router->post('/master/licencias/crear', [MasterController::class, 'createLicencia'], [AuthMiddleware::class]);
 $router->get('/admin/pages', [PageController::class, 'index'], [AuthMiddleware::class]);
 
 // --- Otros Módulos ---
